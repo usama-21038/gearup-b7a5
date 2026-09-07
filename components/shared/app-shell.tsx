@@ -1,4 +1,5 @@
 import { Navbar } from "@/components/shared/navbar";
+import { Footer } from "@/components/shared/footer";
 import type { CurrentUserResponse } from "@/types/user";
 
 export function AppShell({
@@ -12,6 +13,7 @@ export function AppShell({
     <>
       <Navbar user={user} />
       <main className="min-h-[calc(100vh-4rem)]">{children}</main>
+      <Footer />
     </>
   );
 }
