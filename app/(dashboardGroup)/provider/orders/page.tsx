@@ -1,6 +1,3 @@
-import { DashboardShell } from "@/components/dashboard/dashboard-shell";
-import { RoutePlaceholder } from "@/components/shared/route-placeholder";
+import { ProviderOrdersView } from "@/components/provider/provider-pages";
 
-export default function ProviderOrdersPage() {
-  return <DashboardShell role="Provider"><RoutePlaceholder title="Provider orders" description="Incoming rental order foundation." /></DashboardShell>;
-}
+export default ProviderOrdersView;

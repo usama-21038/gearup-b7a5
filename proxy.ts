@@ -86,7 +86,7 @@ export async function proxy(request: NextRequest) {
         return NextResponse.redirect(new URL('/not-found', request.url));
     }else if(pathname.startsWith("/admin") && userRole !== "ADMIN"){
         return NextResponse.redirect(new URL('/not-found', request.url));
-    }else if(pathname.startsWith("/provider") && userRole !== "AUTHOR"){
+    }else if((pathname.startsWith("/provider") || pathname.startsWith("/dashboard/provider")) && userRole !== "AUTHOR"){
         return NextResponse.redirect(new URL('/not-found', request.url));
     }
     

@@ -1,6 +1,3 @@
-import { DashboardShell } from "@/components/dashboard/dashboard-shell";
-import { RoutePlaceholder } from "@/components/shared/route-placeholder";
+import { ProviderGearFormView } from "@/components/provider/provider-pages";
 
-export default function NewProviderGearPage() {
-  return <DashboardShell role="Provider"><RoutePlaceholder title="Add gear" description="Provider gear creation foundation." /></DashboardShell>;
-}
+export default function NewProviderGearPage() { return <ProviderGearFormView />; }

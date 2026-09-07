@@ -1,6 +1,3 @@
-import { DashboardShell } from "@/components/dashboard/dashboard-shell";
-import { RoutePlaceholder } from "@/components/shared/route-placeholder";
+import { ProviderGearFormView } from "@/components/provider/provider-pages";
 
-export default function EditProviderGearPage() {
-  return <DashboardShell role="Provider"><RoutePlaceholder title="Edit gear" description="Provider gear update foundation." /></DashboardShell>;
-}
+export default async function EditProviderGearPage({ params }: { params: Promise<{ id: string }> }) { return <ProviderGearFormView id={(await params).id} />; }

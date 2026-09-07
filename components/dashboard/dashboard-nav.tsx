@@ -18,10 +18,10 @@ export const dashboardNavItems: Record<UserRole, DashboardNavItem[]> = {
     { label: "Profile", href: "/dashboard/customer/profile" },
   ],
   Provider: [
-    { label: "Dashboard", href: "/provider" },
-    { label: "Inventory", href: "/provider/gear" },
-    { label: "Orders", href: "/provider/orders" },
-    { label: "Profile", href: "/provider/profile" },
+    { label: "Dashboard", href: "/dashboard/provider" },
+    { label: "Inventory", href: "/dashboard/provider/gear" },
+    { label: "Orders", href: "/dashboard/provider/orders" },
+    { label: "Profile", href: "/dashboard/provider/profile" },
   ],
   Admin: [
     { label: "Dashboard", href: "/admin" },
