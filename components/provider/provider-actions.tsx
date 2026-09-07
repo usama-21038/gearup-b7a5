@@ -29,7 +29,7 @@ export function DeleteGearButton({ gear, onDeleted }: { gear: Gear; onDeleted?: 
   return <><Button variant="destructive" size="icon-sm" aria-label={`Delete ${gear.name}`} onClick={() => setOpen(true)}><Trash2 /></Button><DialogSurface open={open} onClose={() => setOpen(false)} title="Delete this gear?" description={`This will remove ${gear.name} from your provider inventory.`} actions={<><Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button><Button variant="destructive" onClick={confirmDelete} disabled={pending}>{pending ? <LoaderCircle className="animate-spin" /> : "Delete"}</Button></>} /></>;
 }
 
-const nextStatus: Partial<Record<RentalStatus, { status: RentalStatus; label: string }>> = { PLACED: { status: "CONFIRMED", label: "Confirm" }, CONFIRMED: { status: "PAID", label: "Await payment" }, PAID: { status: "PICKED_UP", label: "Mark picked up" }, PICKED_UP: { status: "RETURNED", label: "Mark returned" } };
+const nextStatus: Partial<Record<RentalStatus, { status: RentalStatus; label: string }>> = { PLACED: { status: "CONFIRMED", label: "Confirm" }, PAID: { status: "PICKED_UP", label: "Mark picked up" }, PICKED_UP: { status: "RETURNED", label: "Mark returned" } };
 
 export function OrderStatusAction({ order, onUpdated }: { order: Rental; onUpdated?: (order: Rental) => void }) {
   const action = nextStatus[order.status];

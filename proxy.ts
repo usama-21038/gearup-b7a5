@@ -8,7 +8,7 @@ import { jwtUtils } from "./utils/jwt";
 
 const AUTH_ROUTES = ["/login", "/register"];
 // const PUBLIC_ROUTES = ["/", "/news", "/login", "/register"]
-const PUBLIC_ROUTES = ["/", "/news", "/gear"]
+const PUBLIC_ROUTES = ["/", "/news", "/gear", "/payment/success", "/payment/cancel"]
 
 // This function can be marked `async` if using `await` inside
 export async function proxy(request: NextRequest) {
