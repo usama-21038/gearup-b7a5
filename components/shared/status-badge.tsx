@@ -1,4 +1,5 @@
 import type { RentalStatus } from "@/types/rental";
+import { Badge } from "@/components/ui/gearup";
 
 const statusLabels: Record<RentalStatus, string> = {
   PLACED: "Placed",
@@ -10,9 +11,5 @@ const statusLabels: Record<RentalStatus, string> = {
 };
 
 export function StatusBadge({ status }: { status: RentalStatus }) {
-  return (
-    <span className="inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium">
-      {statusLabels[status]}
-    </span>
-  );
+  return <Badge tone={status.toLowerCase() as Parameters<typeof Badge>[0]["tone"]}>{statusLabels[status]}</Badge>;
 }

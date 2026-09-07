@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Inter } from "next/font/google";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
