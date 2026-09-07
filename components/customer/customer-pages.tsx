@@ -7,6 +7,7 @@ import { getMe } from "@/service/auth/getMe";
 import { gearForRental, getCustomerDashboardData } from "@/service/customer/customerService";
 import { getGearById } from "@/service/gear/gearService";
 import { getRentalById } from "@/service/rental/rentalService";
+import { rentalDays } from "@/lib/rental-pricing";
 import type { Gear } from "@/types/gear";
 import type { Payment } from "@/types/payment";
 import type { Rental, RentalStatus } from "@/types/rental";
@@ -76,7 +77,7 @@ export async function CustomerPayView({ id }: { id: string }) {
   const result = await loadOrder(id);
   if (result.kind === "missing") notFound();
   if (result.kind === "error") return <CustomerError />;
-  return <CustomerShell title="Checkout"><Button variant="ghost" size="sm" className="mb-4 pl-0" asChild><Link href={`/dashboard/customer/orders/${id}`}><ArrowLeft />Back to order</Link></Button><PageHeading title="Checkout" description="Complete payment for your confirmed rental." /><div className="mt-6 grid items-start gap-6 lg:grid-cols-2"><DashboardPanel title="Payment"><p className="gearup-small">You&apos;ll be redirected to a secure checkout page to complete payment.</p><PaymentButton rentalId={result.rental.id} className="mt-5" /><p className="gearup-caption mt-4">GearUp does not store your payment details.</p></DashboardPanel><DashboardPanel title="Order summary"><DetailRow label="Gear" value={gearName(result.gear, result.rental)} /><DetailRow label="Provider" value={providerName(result.gear)} /><DetailRow label="Rental dates" value={`${formatDate(result.rental.startDate)} – ${formatDate(result.rental.endDate)}`} /><DetailRow label="Total" value={formatCurrency(result.rental.totalAmount)} strong /></DashboardPanel></div></CustomerShell>;
+  return <CustomerShell title="Checkout"><Button variant="ghost" size="sm" className="mb-4 pl-0" asChild><Link href={`/dashboard/customer/orders/${id}`}><ArrowLeft />Back to order</Link></Button><PageHeading title="Checkout" description="Complete payment for your confirmed rental." /><div className="mt-6 grid items-start gap-6 lg:grid-cols-2"><DashboardPanel title="Payment"><p className="gearup-small">You&apos;ll be redirected to a secure checkout page to complete payment.</p><PaymentButton rentalId={result.rental.id} className="mt-5" /><p className="gearup-caption mt-4">GearUp does not store your payment details.</p></DashboardPanel><DashboardPanel title="Order summary"><PaymentSummary rental={result.rental} gear={result.gear} /></DashboardPanel></div></CustomerShell>;
 }
 
 export async function CustomerPaymentsView() {
@@ -138,6 +139,13 @@ function Timeline({ status }: { status: RentalStatus }) {
 
 function DetailRow({ label, value, strong = false }: { label: string; value: string; strong?: boolean }) {
   return <div className={`flex justify-between gap-4 border-b border-border py-3 text-sm last:border-0 ${strong ? "font-bold" : ""}`}><span className={strong ? "text-foreground" : "text-muted-foreground"}>{label}</span><span className="text-right">{value}</span></div>;
+}
+
+function PaymentSummary({ rental, gear }: { rental: Rental; gear?: Gear }) {
+  const days = rentalDays(rental.startDate, rental.endDate);
+  const subtotal = gear ? days * gear.pricePerDay : null;
+  const serviceFee = subtotal !== null ? Math.max(0, Math.round((rental.totalAmount - subtotal) * 100) / 100) : null;
+  return <><DetailRow label="Gear" value={gearName(gear, rental)} /><DetailRow label="Rental dates" value={`${formatDate(rental.startDate)} – ${formatDate(rental.endDate)}`} /><DetailRow label="Rental duration" value={`${days} day${days === 1 ? "" : "s"}`} /><DetailRow label="Price per day" value={gear ? formatCurrency(gear.pricePerDay) : "Unavailable"} />{subtotal !== null ? <DetailRow label="Subtotal" value={formatCurrency(subtotal)} /> : null}{serviceFee !== null && serviceFee > 0 ? <DetailRow label="Service fee" value={formatCurrency(serviceFee)} /> : null}<DetailRow label="Total" value={formatCurrency(rental.totalAmount)} strong /></>;
 }
 
 function PaymentRow({ payment }: { payment: Payment }) {

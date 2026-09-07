@@ -1,5 +1,17 @@
-import { RoutePlaceholder } from "@/components/shared/route-placeholder";
+import { PageContainer } from "@/components/ui/gearup";
+import { CheckCircle2 } from "lucide-react";
+import Link from "next/link";
 
-export default function PaymentSuccessPage() {
-  return <RoutePlaceholder title="Payment successful" description="Payment confirmation foundation." />;
+function parameterValue(params: Record<string, string | string[] | undefined>, key: string) {
+  const value = params[key];
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export default async function PaymentSuccessPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const params = await searchParams;
+  const paymentReference = parameterValue(params, "session_id") ?? parameterValue(params, "sessionId");
+  const rentalId = parameterValue(params, "rentalId");
+  const orderHref = rentalId ? `/dashboard/customer/orders/${encodeURIComponent(rentalId)}` : "/dashboard/customer/orders";
+
+  return <main className="py-12 sm:py-16"><PageContainer><div className="mx-auto max-w-[520px] rounded-xl border border-border bg-card p-6 text-center shadow-[var(--shadow-card)] sm:p-9"><span className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-[#dcfce7] text-[#16a34a]"><CheckCircle2 className="size-6" /></span><h1 className="gearup-h2">Payment successful</h1><p className="gearup-small mt-2">Your payment was completed by the payment provider.</p>{paymentReference ? <div className="mt-5 rounded-md bg-muted px-4 py-3 text-left text-sm"><span className="text-muted-foreground">Payment reference</span><strong className="mt-1 block break-all">{paymentReference}</strong></div> : null}<div className="mt-6 flex flex-col gap-2.5 sm:flex-row"><Link href={orderHref} className="inline-flex h-10 flex-1 items-center justify-center rounded-md border border-border px-5 text-sm font-semibold hover:bg-muted">View orders</Link><Link href="/dashboard/customer" className="inline-flex h-10 flex-1 items-center justify-center rounded-md bg-primary px-5 text-sm font-semibold text-primary-foreground hover:bg-[#1d4ed8]">Go to dashboard</Link></div></div></PageContainer></main>;
 }
