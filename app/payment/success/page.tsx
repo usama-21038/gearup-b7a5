@@ -1,17 +1,89 @@
-import { PageContainer } from "@/components/ui/gearup";
-import { CheckCircle2 } from "lucide-react";
-import Link from "next/link";
+"use client";
 
-function parameterValue(params: Record<string, string | string[] | undefined>, key: string) {
-  const value = params[key];
-  return Array.isArray(value) ? value[0] : value;
+import Link from "next/link";
+import { Suspense, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { rentalApi } from "@/lib/api";
+import type { RentalOrder } from "@/lib/types";
+import { fmtCurrency } from "@/lib/utils";
+import { CheckCircleIcon } from "@/components/icons";
+import { Spinner } from "@/components/ui";
+
+function PaymentSuccessInner() {
+  const searchParams = useSearchParams();
+  const orderId = searchParams.get("order");
+  const tx = searchParams.get("tx");
+  const [order, setOrder] = useState<RentalOrder | null>(null);
+  const [loading, setLoading] = useState(!!orderId);
+
+  useEffect(() => {
+    if (!orderId) return;
+    rentalApi
+      .getById(orderId)
+      .then(setOrder)
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [orderId]);
+
+  return (
+    <div className="auth-shell">
+      <div className="card auth-card" style={{ textAlign: "center" }}>
+        <div
+          style={{
+            width: 64,
+            height: 64,
+            borderRadius: "50%",
+            background: "var(--color-success-tint)",
+            color: "var(--color-success)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: "0 auto 20px",
+          }}
+        >
+          <CheckCircleIcon size={32} />
+        </div>
+        <h1 className="text-h2">Payment successful</h1>
+        <p className="text-body" style={{ margin: "10px 0 20px" }}>
+          Your rental is confirmed. Head to your dashboard to track pickup and return.
+        </p>
+
+        {loading ? (
+          <Spinner dark />
+        ) : order ? (
+          <div className="card" style={{ padding: 16, textAlign: "left", marginBottom: 20 }}>
+            <div className="spec-row">
+              <span>Order</span>
+              <span style={{ fontWeight: 600 }}>{order.id.slice(0, 8)}</span>
+            </div>
+            <div className="spec-row" style={{ borderBottom: "none" }}>
+              <span>Amount paid</span>
+              <span style={{ fontWeight: 700 }}>{fmtCurrency(order.totalAmount)}</span>
+            </div>
+          </div>
+        ) : tx ? (
+          <p className="text-caption" style={{ marginBottom: 20 }}>
+            Transaction reference: {tx}
+          </p>
+        ) : null}
+
+        <div style={{ display: "flex", gap: 10 }}>
+          <Link href="/dashboard/customer/orders" className="btn btn-primary btn-block">
+            View my orders
+          </Link>
+          <Link href="/gear" className="btn btn-outline btn-block">
+            Browse gear
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default async function PaymentSuccessPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
-  const params = await searchParams;
-  const paymentReference = parameterValue(params, "session_id") ?? parameterValue(params, "sessionId");
-  const rentalId = parameterValue(params, "rentalId");
-  const orderHref = rentalId ? `/dashboard/customer/orders/${encodeURIComponent(rentalId)}` : "/dashboard/customer/orders";
-
-  return <main className="py-12 sm:py-16"><PageContainer><div className="mx-auto max-w-[520px] rounded-xl border border-border bg-card p-6 text-center shadow-[var(--shadow-card)] sm:p-9"><span className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-[#dcfce7] text-[#16a34a]"><CheckCircle2 className="size-6" /></span><h1 className="gearup-h2">Payment successful</h1><p className="gearup-small mt-2">Your payment was completed by the payment provider.</p>{paymentReference ? <div className="mt-5 rounded-md bg-muted px-4 py-3 text-left text-sm"><span className="text-muted-foreground">Payment reference</span><strong className="mt-1 block break-all">{paymentReference}</strong></div> : null}<div className="mt-6 flex flex-col gap-2.5 sm:flex-row"><Link href={orderHref} className="inline-flex h-10 flex-1 items-center justify-center rounded-md border border-border px-5 text-sm font-semibold hover:bg-muted">View orders</Link><Link href="/dashboard/customer" className="inline-flex h-10 flex-1 items-center justify-center rounded-md bg-primary px-5 text-sm font-semibold text-primary-foreground hover:bg-[#1d4ed8]">Go to dashboard</Link></div></div></PageContainer></main>;
+export default function PaymentSuccessPage() {
+  return (
+    <Suspense fallback={<div className="auth-shell" />}>
+      <PaymentSuccessInner />
+    </Suspense>
+  );
 }

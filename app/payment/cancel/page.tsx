@@ -1,16 +1,58 @@
-import { PageContainer } from "@/components/ui/gearup";
-import { CircleX } from "lucide-react";
-import Link from "next/link";
+"use client";
 
-function parameterValue(params: Record<string, string | string[] | undefined>, key: string) {
-  const value = params[key];
-  return Array.isArray(value) ? value[0] : value;
+import Link from "next/link";
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import { XCircleIcon } from "@/components/icons";
+
+function PaymentCancelInner() {
+  const searchParams = useSearchParams();
+  const tx = searchParams.get("tx");
+
+  return (
+    <div className="auth-shell">
+      <div className="card auth-card" style={{ textAlign: "center" }}>
+        <div
+          style={{
+            width: 64,
+            height: 64,
+            borderRadius: "50%",
+            background: "var(--color-warning-tint)",
+            color: "var(--color-warning-text)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: "0 auto 20px",
+          }}
+        >
+          <XCircleIcon size={32} />
+        </div>
+        <h1 className="text-h2">Payment cancelled</h1>
+        <p className="text-body" style={{ margin: "10px 0 20px" }}>
+          You cancelled the payment before it completed. No charge was made — you can try again anytime from your orders.
+        </p>
+        {tx && (
+          <p className="text-caption" style={{ marginBottom: 20 }}>
+            Transaction reference: {tx}
+          </p>
+        )}
+        <div style={{ display: "flex", gap: 10 }}>
+          <Link href="/dashboard/customer/orders" className="btn btn-primary btn-block">
+            View my orders
+          </Link>
+          <Link href="/gear" className="btn btn-outline btn-block">
+            Browse gear
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default async function PaymentCancelPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
-  const params = await searchParams;
-  const rentalId = parameterValue(params, "rentalId");
-  const orderHref = rentalId ? `/dashboard/customer/orders/${encodeURIComponent(rentalId)}` : "/dashboard/customer/orders";
-
-  return <main className="py-12 sm:py-16"><PageContainer><div className="mx-auto max-w-[520px] rounded-xl border border-border bg-card p-6 text-center shadow-[var(--shadow-card)] sm:p-9"><span className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-[#fee2e2] text-[#dc2626]"><CircleX className="size-6" /></span><h1 className="gearup-h2">Payment cancelled</h1><p className="gearup-small mt-2">Your payment was not completed. No payment credentials were stored by GearUp.</p><div className="mt-6 flex flex-col gap-2.5 sm:flex-row"><Link href={orderHref} className="inline-flex h-10 flex-1 items-center justify-center rounded-md border border-border px-5 text-sm font-semibold hover:bg-muted">Back to order</Link><Link href="/dashboard/customer" className="inline-flex h-10 flex-1 items-center justify-center rounded-md bg-primary px-5 text-sm font-semibold text-primary-foreground hover:bg-[#1d4ed8]">Go to dashboard</Link></div></div></PageContainer></main>;
+export default function PaymentCancelPage() {
+  return (
+    <Suspense fallback={<div className="auth-shell" />}>
+      <PaymentCancelInner />
+    </Suspense>
+  );
 }

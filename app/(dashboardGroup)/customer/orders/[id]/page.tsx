@@ -1,5 +1,0 @@
-import { CustomerOrderDetailView } from "@/components/customer/customer-pages";
-
-export default async function CustomerOrderDetailsPage({ params }: { params: Promise<{ id: string }> }) {
-  return <CustomerOrderDetailView id={(await params).id} />;
-}
