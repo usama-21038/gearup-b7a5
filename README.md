@@ -1,87 +1,36 @@
-# GearUp — Frontend
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Sports & outdoor gear rental marketplace. Next.js 16 (App Router) frontend for
-the [GearUp backend](https://github.com/usama-21038/gearup-b7a4).
+## Getting Started
 
-Built for Apollo Level 2 Web Dev — Assignment 5.
-
-## Stack
-
-- **Next.js 16** (App Router, Turbopack, `proxy.ts` route protection)
-- **TypeScript**, **Tailwind CSS v4**
-- **TanStack Query** for client-side data fetching/mutations in interactive dashboards
-- **Zod** for form + API payload validation
-- **Stripe Elements** (`@stripe/react-stripe-js`) + **SSLCommerz** redirect for payments
-- **shadcn/ui**-style components built on Radix UI primitives
-- **Sonner** for toast notifications
-
-## Getting started
+First, run the development server:
 
 ```bash
-npm install
-cp .env.example .env.local   # then fill in BACKEND_API_URL and your Stripe key
 npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Open http://localhost:3000.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### Seeded accounts (shared demo backend)
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-| Role  | Email              | Password    |
-|-------|--------------------|-------------|
-| Admin | admin@gearup.com   | admin123456 |
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-Register your own Customer / Provider accounts from `/register`.
+## Learn More
 
-## Project structure
+To learn more about Next.js, take a look at the following resources:
 
-```
-app/
-  (public)/           Home, gear browse & detail — public, SEO-friendly
-  (auth)/              Login, register — Server Actions + Zod + useActionState
-  (dashboard)/         Role-gated shell (Customer / Provider / Admin)
-  payment/             /payment/success, /payment/cancel
-  api/proxy/[...path]  Forwards client-side requests to the backend with the
-                       httpOnly auth cookie attached (see comment in that file)
-proxy.ts               Next.js 16's middleware.ts equivalent — UX-level
-                       role/route redirects (NOT the real security boundary,
-                       see comment inside)
-lib/                   API clients, session/cookie handling, Zod schemas, types
-components/
-  ui/                  Base design-system primitives
-  gear/ customer/ provider/ admin/ payment/ dashboard/ shared/
-```
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## How auth works (short version)
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-1. Login/Register Server Action calls the backend, gets back `{ user, token }`.
-2. The JWT is stored in an **httpOnly** cookie — never readable by browser JS.
-3. Server Components / Server Actions attach it via `lib/api.ts`.
-4. Client Components (dashboards using TanStack Query) call `/api/proxy/*`
-   instead of the backend directly; that route reads the cookie server-side
-   and forwards the request. The token never reaches client-side JavaScript.
-5. `proxy.ts` decodes (does not verify) the JWT for fast UX redirects. The
-   **real** authorization check is the backend re-validating the token's
-   signature + expiry + account status on every request.
+## Deploy on Vercel
 
-See `API_INTEGRATION.md` for the full endpoint-to-page mapping.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-## Payments
-
-- **Stripe**: `/payments/create` returns a `clientSecret`; the frontend
-  renders Stripe's `PaymentElement` and confirms client-side. Test card:
-  `4242 4242 4242 4242`, any future expiry, any CVC.
-- **SSLCommerz**: `/payments/create` returns a `gatewayPageURL`; the browser
-  is redirected there, then back to `/payment/success` or `/payment/cancel`.
-
-Both require the corresponding secret keys to be configured on the **backend**
-(Render env vars) — the frontend only needs the Stripe *publishable* key.
-
-## Known trade-offs (worth mentioning in your video)
-
-- Gear photos are stored as plain URLs (matches the backend schema exactly),
-  so `next.config.ts` allows any HTTPS image host — fine for coursework, but
-  you'd restrict this to an allow-list or your own CDN in production.
-- The date picker prevents past dates but doesn't know which exact dates are
-  already booked (the backend only exposes total `availableQuantity`, not a
-  per-date calendar) — worth naming as a known limitation / future work.
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

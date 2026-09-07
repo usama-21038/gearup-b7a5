@@ -1,33 +1,29 @@
-import type { Metadata } from "next";
-import { Inter, Oswald } from "next/font/google";
-import { Providers } from "./providers";
+import { cn } from "@/lib/utils";
+import { Inter } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
+const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
-const oswald = Oswald({
-  variable: "--font-oswald",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-});
 
-export const metadata: Metadata = {
-  title: {
-    default: "GearUp — Rent Sports & Outdoor Gear Instantly",
-    template: "%s · GearUp",
-  },
-  description:
-    "Browse and rent sports & outdoor equipment from local providers. Book gear by the day, pay securely, and get outside.",
-};
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  
   return (
-    <html lang="en" className={`${inter.variable} ${oswald.variable} h-full`} suppressHydrationWarning>
-      <body className="flex min-h-full flex-col antialiased">
-        <Providers>{children}</Providers>
+    <html
+      lang="en"
+      className={cn("h-full antialiased", "font-sans", inter.variable)}
+    >
+      <body className="min-h-full flex flex-col">
+
+        <Toaster position="top-right" richColors />
+        {/* Navbar */}
+        {children}
+
+        {/* Footer */}
       </body>
     </html>
   );
