@@ -1,6 +1,3 @@
-import { DashboardShell } from "@/components/dashboard/dashboard-shell";
-import { RoutePlaceholder } from "@/components/shared/route-placeholder";
+import { AdminGearView } from "@/components/admin/admin-pages";
 
-export default function AdminGearPage() {
-  return <DashboardShell role="Admin"><RoutePlaceholder title="Gear moderation" description="Admin gear moderation foundation." /></DashboardShell>;
-}
+export default AdminGearView;

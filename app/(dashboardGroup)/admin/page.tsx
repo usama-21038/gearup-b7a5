@@ -1,6 +1,3 @@
-import { DashboardShell } from "@/components/dashboard/dashboard-shell";
-import { RoutePlaceholder } from "@/components/shared/route-placeholder";
+import { AdminDashboardView } from "@/components/admin/admin-pages";
 
-export default function AdminDashboardPage() {
-  return <DashboardShell role="Admin"><RoutePlaceholder title="Admin dashboard" description="Platform moderation foundation." /></DashboardShell>;
-}
+export default AdminDashboardView;

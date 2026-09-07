@@ -24,11 +24,11 @@ export const dashboardNavItems: Record<UserRole, DashboardNavItem[]> = {
     { label: "Profile", href: "/dashboard/provider/profile" },
   ],
   Admin: [
-    { label: "Dashboard", href: "/admin" },
-    { label: "Users", href: "/admin/users" },
-    { label: "Gear", href: "/admin/gear" },
-    { label: "Orders", href: "/admin/orders" },
-    { label: "Profile", href: "/admin/profile" },
+    { label: "Dashboard", href: "/dashboard/admin" },
+    { label: "Users", href: "/dashboard/admin/users" },
+    { label: "Gear", href: "/dashboard/admin/gear" },
+    { label: "Orders", href: "/dashboard/admin/orders" },
+    { label: "Profile", href: "/dashboard/admin/profile" },
   ],
 };
 
