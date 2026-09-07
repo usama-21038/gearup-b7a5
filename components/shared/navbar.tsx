@@ -19,7 +19,7 @@ const navItems = [
 function dashboardHref(role?: string) {
   if (role === "ADMIN") return "/admin";
   if (role === "AUTHOR") return "/provider";
-  return "/customer";
+  return "/dashboard/customer";
 }
 
 function initials(name?: string) {

@@ -1,5 +1,5 @@
 import { CustomerPayView } from "@/components/customer/customer-pages";
 
-export default async function CustomerPaymentPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function CustomerPayPage({ params }: { params: Promise<{ id: string }> }) {
   return <CustomerPayView id={(await params).id} />;
 }

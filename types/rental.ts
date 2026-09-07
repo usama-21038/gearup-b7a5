@@ -13,6 +13,7 @@ export type Rental = {
   endDate: string;
   totalAmount: number;
   status: RentalStatus;
+  reviewed?: boolean;
 };
 
 export type RentalPayload = {

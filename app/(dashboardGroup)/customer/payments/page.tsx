@@ -1,6 +1,3 @@
-import { DashboardShell } from "@/components/dashboard/dashboard-shell";
-import { RoutePlaceholder } from "@/components/shared/route-placeholder";
+import { CustomerPaymentsView } from "@/components/customer/customer-pages";
 
-export default function CustomerPaymentsPage() {
-  return <DashboardShell role="Customer"><RoutePlaceholder title="Payment history" description="Customer payment history foundation." /></DashboardShell>;
-}
+export default CustomerPaymentsView;

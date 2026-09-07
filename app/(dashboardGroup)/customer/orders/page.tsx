@@ -1,6 +1,3 @@
-import { DashboardShell } from "@/components/dashboard/dashboard-shell";
-import { RoutePlaceholder } from "@/components/shared/route-placeholder";
+import { CustomerOrdersView } from "@/components/customer/customer-pages";
 
-export default function CustomerOrdersPage() {
-  return <DashboardShell role="Customer"><RoutePlaceholder title="Customer orders" description="Rental order history foundation." /></DashboardShell>;
-}
+export default CustomerOrdersView;

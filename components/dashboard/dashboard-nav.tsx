@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { UserRole } from "@/types/auth";
 
 export type DashboardNavItem = {
@@ -8,11 +11,11 @@ export type DashboardNavItem = {
 
 export const dashboardNavItems: Record<UserRole, DashboardNavItem[]> = {
   Customer: [
-    { label: "Dashboard", href: "/customer" },
-    { label: "Orders", href: "/customer/orders" },
-    { label: "Payments", href: "/customer/payments" },
-    { label: "Reviews", href: "/customer/reviews" },
-    { label: "Profile", href: "/customer/profile" },
+    { label: "Dashboard", href: "/dashboard/customer" },
+    { label: "Orders", href: "/dashboard/customer/orders" },
+    { label: "Payments", href: "/dashboard/customer/payments" },
+    { label: "Reviews", href: "/dashboard/customer/reviews" },
+    { label: "Profile", href: "/dashboard/customer/profile" },
   ],
   Provider: [
     { label: "Dashboard", href: "/provider" },
@@ -30,17 +33,20 @@ export const dashboardNavItems: Record<UserRole, DashboardNavItem[]> = {
 };
 
 export function DashboardNav({ items }: { items: DashboardNavItem[] }) {
+  const pathname = usePathname();
   return (
-    <nav aria-label="Dashboard navigation" className="flex flex-wrap gap-2">
+    <aside className="border-b border-border bg-card px-0 py-4 lg:min-h-[calc(100vh-68px)] lg:border-b-0 lg:border-r lg:px-4 lg:py-6">
+      <nav aria-label="Dashboard navigation" className="flex gap-1 overflow-x-auto lg:sticky lg:top-[92px] lg:flex-col">
       {items.map((item) => (
         <Link
-          className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          className={`whitespace-nowrap rounded-md px-3 py-2.5 text-sm font-semibold transition-colors hover:bg-muted hover:text-foreground ${pathname === item.href || pathname.startsWith(`${item.href}/`) ? "bg-secondary text-secondary-foreground" : "text-muted-foreground"}`}
           href={item.href}
           key={item.href}
         >
           {item.label}
         </Link>
       ))}
-    </nav>
+      </nav>
+    </aside>
   );
 }
